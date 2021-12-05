@@ -2,15 +2,21 @@ import Data.Ord
 import Control.Monad
 
 window3 :: [Int] -> [Int]
-window3 = fmap (\(a, b, c) -> a + b + c) . (zip3 <*> tail <*> tail . tail)
+window3 = zipWith3 (\a b c -> a + b + c) <$> id <*> tail <*> tail . tail
 
 diffs :: [Int] -> [Ordering]
-diffs = zipWith compare <$> tail <*> id
+diffs = zipWith compare <$> id <*> tail
 
-countIncreasing :: [Int] -> Int
-countIncreasing = length . filter (GT ==) . diffs
+countLT :: [Ordering] -> Int
+countLT = length . filter (LT ==)
+
+part1 :: [Int] -> Int
+part1 = countLT . diffs
+
+part2 :: [Int] -> Int
+part2 = countLT . diffs . window3
 
 main = do
     nums <- fmap read <$> words <$> readFile "input01.txt"
-    print $ countIncreasing nums
-    print $ countIncreasing $ window3 nums
+    print (part1 nums)
+    print (part2 nums)

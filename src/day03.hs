@@ -33,7 +33,13 @@ co2 [] = []
 binToNum :: [Int] -> Int
 binToNum = foldl1 ((+) . (2*))
     
+part1 :: [[Int]] -> Int
+part1 bs = (binToNum (epsilon bs)) * (binToNum (gamma bs))
+
+part2 :: [[Int]] -> Int
+part2 bs = (binToNum (co2 bs)) * (binToNum (oxygen bs))
+
 main = do
-    numbers <- (fmap $ fmap digitToInt) <$> lines <$> readFile "input03.txt"
-    print $ (binToNum $ epsilon numbers) * (binToNum $ gamma numbers)
-    print $ (binToNum $ co2 numbers) * (binToNum $ oxygen numbers)
+    bs <- (fmap $ fmap digitToInt) <$> lines <$> readFile "input03.txt"
+    print (part1 bs)
+    print (part2 bs)

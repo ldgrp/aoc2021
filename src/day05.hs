@@ -22,7 +22,13 @@ drawPoint = flip (M.insertWith (const (+ 1))) 1
 isDiagonal :: Line -> Bool
 isDiagonal ((x1, y1), (x2, y2)) = x1 == x2 || y1 == y2
 
+part1 :: [Line] -> Int
+part1 = length . M.filter (>= 2) . foldr drawLine M.empty . filter isDiagonal
+
+part2 :: [Line] -> Int
+part2 = length . M.filter (>= 2) . foldr drawLine M.empty
+
 main = do
     vents <- fmap parseLine <$> lines <$> readFile "input05.txt"
-    print $ length $ M.filter (>= 2) $ foldr drawLine M.empty $ filter isDiagonal vents
-    print $ length $ M.filter (>= 2) $ foldr drawLine M.empty vents
+    print (part1 vents)
+    print (part2 vents)

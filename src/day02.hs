@@ -1,6 +1,6 @@
 import Control.Monad
 
-data Instr = Forward Integer | Down Integer | Up Integer deriving (Show, Eq)
+data Instr = Forward Int | Down Int | Up Int deriving (Show, Eq)
 
 toInstr :: [String] -> Instr
 toInstr (d:x:_) 
@@ -8,18 +8,24 @@ toInstr (d:x:_)
     | d == "up" = Up (read x)
     | d == "down" = Down (read x)
 
-getPos :: (Integer, Integer) -> Instr -> (Integer, Integer)
+getPos :: (Int, Int) -> Instr -> (Int, Int)
 getPos (x, y) (Forward n) = (x+n, y)
 getPos (x, y) (Up n) = (x, y-n)
 getPos (x, y) (Down n) = (x, y+n)
 
-getPosWithAim :: (Integer, Integer, Integer) -> Instr -> (Integer, Integer, Integer)
+getPosWithAim :: (Int, Int, Int) -> Instr -> (Int, Int, Int)
 getPosWithAim (x, y, a) (Forward n) = (x+n, y+(n*a), a)
 getPosWithAim (x, y, a) (Up n) = (x, y, a-n)
 getPosWithAim (x, y, a) (Down n) = (x, y, a+n)
 
+part1 :: [Instr] -> Int
+part1 = uncurry (*) . foldl getPos (0, 0)
+
+part2 :: [Instr] -> Int
+part2 =  (\(x, y, _) -> x * y) . foldl getPosWithAim (0, 0, 0)
+
 main = do 
     instrs <- fmap (toInstr . words) <$> lines <$> readFile "input02.txt"
-    print $ (\(x, y) -> x * y) $ foldl getPos (0, 0) instrs
-    print $ (\(x, y, _a) -> x * y) $ foldl getPosWithAim (0, 0, 0) instrs
+    print (part1 instrs)
+    print (part2 instrs)
     

@@ -1,16 +1,18 @@
 import Data.List
 import Data.List.Split
+import Data.Maybe
 
-type Board = [[Int]]
+type Board = [[Maybe Int]]
 
 parse :: [String] -> ([Int], [Board])
 parse (x:xs) = (parseDraws x, parseBoard <$> splitOn [""] xs)
     where parseDraws = fmap read . splitOn ","
-          parseBoard = fmap (fmap read . words)
+          parseBoard = fmap (fmap (Just . read) . words)
 
 markBoard :: Int -> Board -> Board 
 markBoard = fmap . fmap . markCell
-    where markCell n c = if c == n then 0 else c
+    where markCell n (Just c) | c == n = Nothing
+          markCell _ c = c
 
 stepBingo :: ([(Board, Int)], [Board]) -> Int -> ([(Board, Int)], [Board])
 stepBingo (wonBoards, boards) i = (wonBoards' ++ wonBoards, boards')
@@ -22,15 +24,22 @@ stepBingo' boards i = (fmap (flip (,) i) wonBoards, boards')
           markedBoards = fmap (markBoard i) boards
 
 isBingo :: Board -> Bool
-isBingo ns = or (any (== 0) . (fmap sum) <$> [transpose ns, ns]) 
+isBingo ns = or (any (and . fmap isNothing) <$> [transpose ns, ns]) 
 
 playBingo :: [Int] -> [Board] -> [(Board, Int)]
 playBingo draws boards = fst $ foldl stepBingo ([], boards) draws
 
 score :: Board -> Int -> Int
-score = (*) . sum . fmap sum
+score bs i = i * (sum $ fmap (sum . catMaybes) bs)
+
+part1 :: [Int] -> [Board] -> Int
+part1 = ((uncurry score . last) .) . playBingo
+
+
+part2 :: [Int] -> [Board] -> Int
+part2 = ((uncurry score . head) .) . playBingo
 
 main = do
-    wonBoards <- uncurry playBingo <$> parse <$> lines <$> readFile "input04.txt"
-    print $ (uncurry score) (last wonBoards)
-    print $ (uncurry score) (head wonBoards)
+    (draws, boards) <- parse <$> lines <$> readFile "input04.txt"
+    print (part1 draws boards)
+    print (part2 draws boards)

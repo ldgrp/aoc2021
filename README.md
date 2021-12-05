@@ -9,6 +9,8 @@ _Domino from Amphibia S03E09_
 
 ## Code
 
+[**Walkthrough**][walkthrough]
+
 | Day | Prompt             | Solution        |
 | --- | ------------------ | --------------- |
 | 1   | [prompt][prompt01] | [src][day01src] |
@@ -17,6 +19,7 @@ _Domino from Amphibia S03E09_
 | 4   | [prompt][prompt04] | [src][day04src] |
 | 5   | [prompt][prompt05] | [src][day05src] |
 
+[walkthrough]: src/README.md
 [day01src]: src/day01.hs
 [day02src]: src/day02.hs
 [day03src]: src/day03.hs
