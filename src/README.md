@@ -116,7 +116,7 @@ part2 =  (\(x, y, _) -> x * y) . foldl getPosWithAim (0, 0, 0)
 ```
 
 ## Day 3 - Binary Diagnostic
-[Prompt][prompt02] - [Solution][day02src]
+[Prompt][prompt03] - [Solution][day03src]
 
 
 Let's start by declaring some useful utility functions. First, we need to 
@@ -261,7 +261,7 @@ part2 bs = (binToNum (co2 bs)) * (binToNum (oxygen bs))
 ```
 
 ## Day 4 - Giant Squid
-[Prompt][prompt02] - [Solution][day02src]
+[Prompt][prompt04] - [Solution][day04src]
 
 ### Part 1
 
@@ -436,7 +436,7 @@ part2 = ((uncurry score . head) .) . playBingo
 See, that wasn't that bad. Anyway two more gold stars :)
 
 ## Day 5 - Hydrothermal Venture
-[Prompt][prompt02] - [Solution][day02src]
+[Prompt][prompt05] - [Solution][day05src]
 
 ### Part 1
 
@@ -513,6 +513,7 @@ part2 = length . M.filter (>= 2) . foldr drawLine M.empty
 ```
 
 ## Day 6 - Lanternfish
+[Prompt][prompt06] - [Solution][day06src]
 
 ### Part 1
 
