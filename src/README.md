@@ -512,11 +512,77 @@ part2 = length . M.filter (>= 2) . foldr drawLine M.empty
 -- part2 vents = length $ M.filter (>= 2) $ foldr drawLine M.empty vents 
 ```
 
+## Day 6 - Lanternfish
+
+### Part 1
+
+Fortunately we aren't dealing with the [Anglerfish from Outer Wilds](https://outerwilds.fandom.com/wiki/Anglerfish).
+
+We are given a `[Int]` representing the internal timers of each lanternfish.
+The timers decrease at each step. Once a timer reaches 0, it resets its timer
+to 6 and a *new* laternfish spawns with a timer of 8.
+
+```haskell
+nextDay :: [Int]  -- the current generation of fish
+        -> [Int]  -- the next generation of fish
+nextDay fish = fish' ++ newFish
+    where fish' = fmap step fish
+          newFish = replicate (length (filter (== 0) fish)) 8
+
+step :: Int  -- the current state of an internal timer
+     -> Int  -- the next state of an internal timer
+step 0 = 6
+step x = x-1
+```
+
+We can run the simulation with `iterate` which repeatedly applies a function
+to an initial value. We ignore the first 80 results (the resulting list
+includes the initial state) to get the state of the fish at the 80th day.
+
+```haskell
+-- iterate :: (a -> a) -> a -> [a]
+part1 :: [Int] -> Int
+part1 = sum . head . drop 80 . iterate nextDay
+```
+
+### Part 2
+
+Our naive solution won't work anymore! The sample input produces 27 billion
+fish after 256 days and `fmap`ing over lists that big would take forever.
+
+Let's instead keep track of the number of fish with the same internal timer value.
+We can implicitly store the timer value by their position in the list, or in this
+case, a tuple.
+
+```haskell
+nextDay' :: (Int, Int, Int, Int, Int, Int, Int, Int, Int) 
+         -> (Int, Int, Int, Int, Int, Int, Int, Int, Int)
+nextDay' (a, b, c, d, e, f, g, h, i) = (b, c, d, e, f, g, h+a, i, a)
+```
+
+Unfortunately, the next function isn't as nice but it does the job. 
+
+```haskell
+part2 :: [Int] -> Int
+part2 fish = sum' (head (drop 256 (iterate nextDay' fish')))                     -- 4
+    where (a:b:c:d:e:f:g:h:i:_) = [length (filter (== l) fish) | l <- [0 .. 8]]  -- 1
+          fish' = (a, b, c, d, e, f, g, h, i)                                    -- 2
+          sum' (s, t, u, v, w, x, y, z) = s + t + u + v + w + x + y + z          -- 3
+```
+
+Most of the mess comes from packing and dealing with tuples, but it is mostly 
+similar to `part1`. In (1), we count how many fish of every possible internal timer value exists,
+and destructure the resulting list. The references to elements of this list is used in (2) to construct
+`fish'` which is a 9-tuple of the shape required by `nextDay'`. (3) declares `sum'`: a way
+to sum 9-tuples. Finally, we put everything together in (4) and ohwow that's a lot of lanternfish.
+
+
 [day01src]: day01.hs
 [day02src]: day02.hs
 [day03src]: day03.hs
 [day04src]: day04.hs
 [day05src]: day05.hs
+[day06src]: day06.hs
 
 [aoc]: https://adventofcode.com/2021
 [prompt01]: https://adventofcode.com/2021/day/1
@@ -524,3 +590,4 @@ part2 = length . M.filter (>= 2) . foldr drawLine M.empty
 [prompt03]: https://adventofcode.com/2021/day/3
 [prompt04]: https://adventofcode.com/2021/day/4
 [prompt05]: https://adventofcode.com/2021/day/5
+[prompt06]: https://adventofcode.com/2021/day/6

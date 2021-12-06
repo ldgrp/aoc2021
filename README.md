@@ -18,6 +18,7 @@ _Domino from Amphibia S03E09_
 | 3   | [prompt][prompt03] | [src][day03src] |
 | 4   | [prompt][prompt04] | [src][day04src] |
 | 5   | [prompt][prompt05] | [src][day05src] |
+| 6   | [prompt][prompt06] | [src][day06src] |
 
 [walkthrough]: src/README.md
 [day01src]: src/day01.hs
@@ -25,6 +26,7 @@ _Domino from Amphibia S03E09_
 [day03src]: src/day03.hs
 [day04src]: src/day04.hs
 [day05src]: src/day05.hs
+[day06src]: src/day06.hs
 
 [aoc]: https://adventofcode.com/2021
 [prompt01]: https://adventofcode.com/2021/day/1
@@ -32,3 +34,4 @@ _Domino from Amphibia S03E09_
 [prompt03]: https://adventofcode.com/2021/day/3
 [prompt04]: https://adventofcode.com/2021/day/4
 [prompt05]: https://adventofcode.com/2021/day/5
+[prompt06]: https://adventofcode.com/2021/day/6
